@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: inflation_game_app
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PGUSER=postgres
+      - PGHOST=db
+      - PGDATABASE=inflationGame
+      - PGPASSWORD=postgres
+      - PGPORT=5432
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+  frontend:
+    container_name: inflation_game_frontend
+    build:
+      context: ./frontend  # Replace with the path to your Next.js app directory
+      dockerfile: Dockerfile-next    # The Dockerfile for your Next.js app
+    ports:
+      - "3001:3000"                  # Exposing it on a different port if 3000 is used by backend
+    volumes:
+      - ./frontend:/app    # Mount the Next.js app directory
+      - /app/node_modules            # To avoid overriding node_modules
+  db:
+    container_name: inflation_game_db
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=inflationGame
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  pgadmin:
+    container_name: inflation_game_pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+      - PGADMIN_LISTEN_PORT=80
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  pgdata:
+  pgadmin_data:

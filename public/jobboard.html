@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Board</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+        rel="stylesheet"
+    />
+    <style>
+        /* Custom CSS for Job Cards */
+        .job-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .job-salary {
+            font-size: 18px;
+            font-weight: 500;
+            color: #1a8ea3;
+        }
+
+        .job-details {
+            margin-top: 12px;
+        }
+
+        .job-skill {
+            font-weight: 500;
+            margin-right: 10px;
+        }
+
+        .job-experience {
+            font-weight: 500;
+        }
+
+        .job-vacancies {
+            margin-top: 12px;
+        }
+
+        .job-vacancy-count {
+            font-weight: 500;
+            color: #1a8ea3;
+        }
+
+        .job-vacancy-label {
+            font-weight: 500;
+            color: #777777;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+<div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6">Job Vacancies</h1>
+
+    <!-- Job Cards -->
+    <div id="job-vacancies-container">
+        <!-- Dynamic job vacancies data will be loaded here -->
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<script>
+    // Function to fetch and display job vacancies data
+    async function fetchAndDisplayJobVacancies() {
+        try {
+            // Make a request to the server to fetch job vacancies data
+            const response = await fetch("/get-all-job-vacancies");
+            if (response.ok) {
+                const jobVacanciesData = await response.json();
+                console.log("Fetched job vacancies data:", jobVacanciesData); // Debugging statement
+                displayJobVacancies(jobVacanciesData);
+            } else {
+                console.error(
+                    "Failed to fetch job vacancies data:",
+                    response.statusText
+                ); // Debugging statement
+                // Handle errors, e.g., display an error message to the user
+            }
+        } catch (error) {
+            console.error("Error while fetching job vacancies data:", error); // Debugging statement
+            // Handle errors, e.g., display an error message to the user
+        }
+    }
+
+    // Function to display job vacancies data in job cards
+    function displayJobVacancies(data) {
+        const jobVacanciesContainer = document.getElementById(
+            "job-vacancies-container"
+        );
+
+        // Clear any existing content in the container
+        jobVacanciesContainer.innerHTML = "";
+
+        // Loop through the job vacancies data and create job cards
+        data.forEach((job) => {
+            // Create a job card element
+            const jobCard = document.createElement("div");
+            jobCard.classList.add("job-card");
+
+            // Create job title element
+            const jobTitle = document.createElement("div");
+            jobTitle.classList.add("job-title");
+            jobTitle.textContent = job.jobtitle;
+
+            // Create job salary element
+            const jobSalary = document.createElement("div");
+            jobSalary.classList.add("job-salary");
+            jobSalary.textContent = "Salary: £" + job.averageannualpay;
+
+            // Create job details element
+            const jobDetails = document.createElement("div");
+            jobDetails.classList.add("job-details");
+
+            // Create skill and experience elements
+            const jobSkill = document.createElement("span");
+            jobSkill.classList.add("job-skill");
+            jobSkill.textContent = "Skill: " + job.skilllevel;
+
+            const jobExperience = document.createElement("span");
+            jobExperience.classList.add("job-experience");
+            jobExperience.textContent = "Experience: " + job.experiencelevel;
+
+            // Create job vacancies element
+            const jobVacancies = document.createElement("div");
+            jobVacancies.classList.add("job-vacancies");
+            const jobVacancyCount = document.createElement("span");
+            jobVacancyCount.classList.add("job-vacancy-count");
+            jobVacancyCount.textContent = "Vacancies: " + job.vacantpositions;
+            const jobVacancyLabel = document.createElement("span");
+            jobVacancyLabel.classList.add("job-vacancy-label");
+            jobVacancyLabel.textContent = " Vacancy Filled: " + job.filledpositions;
+
+            // Append elements to job details
+            jobDetails.appendChild(jobSkill);
+            jobDetails.appendChild(jobExperience);
+
+            // Append elements to job vacancies
+            jobVacancies.appendChild(jobVacancyCount);
+            jobVacancies.appendChild(jobVacancyLabel);
+
+            // Append elements to the job card
+            jobCard.appendChild(jobTitle);
+            jobCard.appendChild(jobSalary);
+            jobCard.appendChild(jobDetails);
+            jobCard.appendChild(jobVacancies);
+
+            // Append the job card to the container
+            jobVacanciesContainer.appendChild(jobCard);
+        });
+    }
+
+    // Call the fetchAndDisplayJobVacancies function when the job board page loads
+    window.addEventListener("load", fetchAndDisplayJobVacancies);
+</script>
+</body>
+</html>

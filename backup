@@ -1,0 +1,832 @@
+--
+-- PostgreSQL database cluster dump
+--
+
+-- Started on 2024-01-21 18:50:33 UTC
+
+SET default_transaction_read_only = off;
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+
+--
+-- Roles
+--
+
+CREATE ROLE postgres;
+ALTER ROLE postgres WITH SUPERUSER INHERIT CREATEROLE CREATEDB LOGIN REPLICATION BYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:lMVgiXwi+P6QvcMCn/CLWg==$xP+fI1rWn3GDuSRPiGcfjxmMiRyvjN6ST4ViE2xPjlI=:fda8chmsIPBiIzaKZ4krZ44yFKjSvqH7tIxfVjE+OVM=';
+
+--
+-- User Configurations
+--
+
+
+
+
+
+
+
+
+--
+-- Databases
+--
+
+--
+-- Database "template1" dump
+--
+
+\connect template1
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.3 (Debian 15.3-1.pgdg120+1)
+-- Dumped by pg_dump version 15.3
+
+-- Started on 2024-01-21 18:50:33 UTC
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+-- Completed on 2024-01-21 18:50:33 UTC
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- Database "inflationGame" dump
+--
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.3 (Debian 15.3-1.pgdg120+1)
+-- Dumped by pg_dump version 15.3
+
+-- Started on 2024-01-21 18:50:33 UTC
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 3477 (class 1262 OID 16388)
+-- Name: inflationGame; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE "inflationGame" WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8';
+
+
+ALTER DATABASE "inflationGame" OWNER TO postgres;
+
+\connect "inflationGame"
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 221 (class 1259 OID 16438)
+-- Name: challenges; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.challenges (
+    challenge_id integer NOT NULL,
+    description text,
+    difficulty_level character varying(50),
+    reward character varying(255),
+    start_date timestamp with time zone,
+    end_date timestamp with time zone
+);
+
+
+ALTER TABLE public.challenges OWNER TO postgres;
+
+--
+-- TOC entry 220 (class 1259 OID 16437)
+-- Name: challenges_challenge_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.challenges_challenge_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.challenges_challenge_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3478 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: challenges_challenge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.challenges_challenge_id_seq OWNED BY public.challenges.challenge_id;
+
+
+--
+-- TOC entry 227 (class 1259 OID 16480)
+-- Name: economic_calendar; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.economic_calendar (
+    id integer NOT NULL,
+    date date NOT NULL,
+    "time" time without time zone NOT NULL,
+    country character varying(3) NOT NULL,
+    indicator text NOT NULL,
+    actual numeric,
+    previous numeric,
+    consensus numeric,
+    forecast numeric
+);
+
+
+ALTER TABLE public.economic_calendar OWNER TO postgres;
+
+--
+-- TOC entry 226 (class 1259 OID 16479)
+-- Name: economic_calendar_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.economic_calendar_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.economic_calendar_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3479 (class 0 OID 0)
+-- Dependencies: 226
+-- Name: economic_calendar_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.economic_calendar_id_seq OWNED BY public.economic_calendar.id;
+
+
+--
+-- TOC entry 223 (class 1259 OID 16459)
+-- Name: economic_data; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.economic_data (
+    id integer NOT NULL,
+    data_type character varying(255) NOT NULL,
+    value numeric NOT NULL,
+    date_updated timestamp without time zone NOT NULL,
+    description text
+);
+
+
+ALTER TABLE public.economic_data OWNER TO postgres;
+
+--
+-- TOC entry 222 (class 1259 OID 16458)
+-- Name: economic_data_id_seq1; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.economic_data_id_seq1
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.economic_data_id_seq1 OWNER TO postgres;
+
+--
+-- TOC entry 3480 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: economic_data_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.economic_data_id_seq1 OWNED BY public.economic_data.id;
+
+
+--
+-- TOC entry 225 (class 1259 OID 16470)
+-- Name: economiccalendar; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.economiccalendar (
+    id integer NOT NULL,
+    datetime timestamp with time zone NOT NULL,
+    countrycode character varying(3) NOT NULL,
+    eventname text NOT NULL,
+    actualvalue numeric,
+    previousvalue numeric,
+    consensusvalue numeric,
+    forecastvalue numeric,
+    impactlevel integer,
+    revisedflag boolean DEFAULT false
+);
+
+
+ALTER TABLE public.economiccalendar OWNER TO postgres;
+
+--
+-- TOC entry 224 (class 1259 OID 16469)
+-- Name: economiccalendar_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.economiccalendar_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.economiccalendar_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3481 (class 0 OID 0)
+-- Dependencies: 224
+-- Name: economiccalendar_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.economiccalendar_id_seq OWNED BY public.economiccalendar.id;
+
+
+--
+-- TOC entry 233 (class 1259 OID 16565)
+-- Name: events; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.events (
+    event_id integer NOT NULL,
+    event_type character varying(255) NOT NULL,
+    aggregate_id integer NOT NULL,
+    aggregate_type character varying(255) NOT NULL,
+    event_data jsonb NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.events OWNER TO postgres;
+
+--
+-- TOC entry 232 (class 1259 OID 16564)
+-- Name: events_event_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.events_event_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.events_event_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3482 (class 0 OID 0)
+-- Dependencies: 232
+-- Name: events_event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.events_event_id_seq OWNED BY public.events.event_id;
+
+
+--
+-- TOC entry 219 (class 1259 OID 16415)
+-- Name: investments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.investments (
+    investment_id integer NOT NULL,
+    player_id integer NOT NULL,
+    asset_type character varying(100) NOT NULL,
+    amount_invested numeric(10,2) NOT NULL,
+    current_value numeric(10,2),
+    investment_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.investments OWNER TO postgres;
+
+--
+-- TOC entry 218 (class 1259 OID 16414)
+-- Name: investments_investment_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.investments_investment_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.investments_investment_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3483 (class 0 OID 0)
+-- Dependencies: 218
+-- Name: investments_investment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.investments_investment_id_seq OWNED BY public.investments.investment_id;
+
+
+--
+-- TOC entry 229 (class 1259 OID 16489)
+-- Name: jobboard; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.jobboard (
+    jobid integer NOT NULL,
+    jobtitle character varying(255) NOT NULL,
+    averagehourlypay numeric,
+    averageweeklypay numeric,
+    averageannualpay numeric,
+    skilllevel character varying(50),
+    experiencelevel character varying(50),
+    averagehoursperweek numeric,
+    totalpositions integer,
+    filledpositions integer DEFAULT 0,
+    vacantpositions integer
+);
+
+
+ALTER TABLE public.jobboard OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 16488)
+-- Name: jobboard_jobid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.jobboard_jobid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.jobboard_jobid_seq OWNER TO postgres;
+
+--
+-- TOC entry 3484 (class 0 OID 0)
+-- Dependencies: 228
+-- Name: jobboard_jobid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.jobboard_jobid_seq OWNED BY public.jobboard.jobid;
+
+
+--
+-- TOC entry 231 (class 1259 OID 16515)
+-- Name: player_outgoings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.player_outgoings (
+    player_id integer NOT NULL,
+    weekly_housing numeric(10,2) DEFAULT 50.00,
+    monthly_housing numeric(10,2) DEFAULT 200.00,
+    annual_housing numeric(10,2) DEFAULT 2400.00,
+    weekly_transport numeric(10,2) DEFAULT 20.00,
+    monthly_transport numeric(10,2) DEFAULT 80.00,
+    annual_transport numeric(10,2) DEFAULT 960.00,
+    weekly_food numeric(10,2) DEFAULT 40.00,
+    monthly_food numeric(10,2) DEFAULT 160.00,
+    annual_food numeric(10,2) DEFAULT 1920.00,
+    weekly_utilities numeric(10,2) DEFAULT 20.00,
+    monthly_utilities numeric(10,2) DEFAULT 80.00,
+    annual_utilities numeric(10,2) DEFAULT 960.00,
+    weekly_recreation numeric(10,2) DEFAULT 10.00,
+    monthly_recreation numeric(10,2) DEFAULT 40.00,
+    annual_recreation numeric(10,2) DEFAULT 480.00,
+    weekly_restaurants numeric(10,2) DEFAULT 10.00,
+    monthly_restaurants numeric(10,2) DEFAULT 40.00,
+    annual_restaurants numeric(10,2) DEFAULT 480.00,
+    weekly_household numeric(10,2) DEFAULT 10.00,
+    monthly_household numeric(10,2) DEFAULT 40.00,
+    annual_household numeric(10,2) DEFAULT 480.00,
+    weekly_council_tax numeric(10,2) DEFAULT 10.00,
+    monthly_council_tax numeric(10,2) DEFAULT 40.00,
+    annual_council_tax numeric(10,2) DEFAULT 480.00,
+    weekly_communications numeric(10,2) DEFAULT 10.00,
+    monthly_communications numeric(10,2) DEFAULT 40.00,
+    annual_communications numeric(10,2) DEFAULT 480.00,
+    weekly_insurance numeric(10,2) DEFAULT 5.00,
+    monthly_insurance numeric(10,2) DEFAULT 20.00,
+    annual_insurance numeric(10,2) DEFAULT 240.00,
+    weekly_other numeric(10,2) DEFAULT 10.00,
+    monthly_other numeric(10,2) DEFAULT 40.00,
+    annual_other numeric(10,2) DEFAULT 480.00,
+    weekly_education numeric(10,2) DEFAULT 0.00,
+    monthly_education numeric(10,2) DEFAULT 0.00,
+    annual_education numeric(10,2) DEFAULT 0.00,
+    weekly_licences_fines numeric(10,2) DEFAULT 0.00,
+    monthly_licences_fines numeric(10,2) DEFAULT 0.00,
+    annual_licences_fines numeric(10,2) DEFAULT 0.00,
+    weekly_holiday_spending numeric(10,2) DEFAULT 0.00,
+    monthly_holiday_spending numeric(10,2) DEFAULT 0.00,
+    annual_holiday_spending numeric(10,2) DEFAULT 0.00
+);
+
+
+ALTER TABLE public.player_outgoings OWNER TO postgres;
+
+--
+-- TOC entry 230 (class 1259 OID 16514)
+-- Name: player_outgoings_player_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.player_outgoings_player_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.player_outgoings_player_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3485 (class 0 OID 0)
+-- Dependencies: 230
+-- Name: player_outgoings_player_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.player_outgoings_player_id_seq OWNED BY public.player_outgoings.player_id;
+
+
+--
+-- TOC entry 215 (class 1259 OID 16390)
+-- Name: players; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.players (
+    player_id integer NOT NULL,
+    username character varying(255) NOT NULL,
+    email character varying(255),
+    current_balance numeric(10,2),
+    total_income numeric(10,2),
+    total_savings numeric(10,2),
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    last_login timestamp with time zone,
+    password character varying(255) NOT NULL,
+    skill character varying(50) DEFAULT 'Low'::character varying,
+    experience character varying(50) DEFAULT 'Entry-Level'::character varying,
+    employment_status character varying(50) DEFAULT 'Unemployed'::character varying,
+    health integer DEFAULT 100
+);
+
+
+ALTER TABLE public.players OWNER TO postgres;
+
+--
+-- TOC entry 214 (class 1259 OID 16389)
+-- Name: players_player_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.players_player_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.players_player_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3486 (class 0 OID 0)
+-- Dependencies: 214
+-- Name: players_player_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.players_player_id_seq OWNED BY public.players.player_id;
+
+
+--
+-- TOC entry 217 (class 1259 OID 16400)
+-- Name: transactions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.transactions (
+    transaction_id integer NOT NULL,
+    player_id integer NOT NULL,
+    type character varying(50) NOT NULL,
+    amount numeric(10,2) NOT NULL,
+    description text,
+    transaction_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.transactions OWNER TO postgres;
+
+--
+-- TOC entry 216 (class 1259 OID 16399)
+-- Name: transactions_transaction_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.transactions_transaction_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.transactions_transaction_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 3487 (class 0 OID 0)
+-- Dependencies: 216
+-- Name: transactions_transaction_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.transactions_transaction_id_seq OWNED BY public.transactions.transaction_id;
+
+
+--
+-- TOC entry 3254 (class 2604 OID 16441)
+-- Name: challenges challenge_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.challenges ALTER COLUMN challenge_id SET DEFAULT nextval('public.challenges_challenge_id_seq'::regclass);
+
+
+--
+-- TOC entry 3258 (class 2604 OID 16483)
+-- Name: economic_calendar id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.economic_calendar ALTER COLUMN id SET DEFAULT nextval('public.economic_calendar_id_seq'::regclass);
+
+
+--
+-- TOC entry 3255 (class 2604 OID 16462)
+-- Name: economic_data id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.economic_data ALTER COLUMN id SET DEFAULT nextval('public.economic_data_id_seq1'::regclass);
+
+
+--
+-- TOC entry 3256 (class 2604 OID 16473)
+-- Name: economiccalendar id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.economiccalendar ALTER COLUMN id SET DEFAULT nextval('public.economiccalendar_id_seq'::regclass);
+
+
+--
+-- TOC entry 3304 (class 2604 OID 16568)
+-- Name: events event_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.events ALTER COLUMN event_id SET DEFAULT nextval('public.events_event_id_seq'::regclass);
+
+
+--
+-- TOC entry 3252 (class 2604 OID 16418)
+-- Name: investments investment_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.investments ALTER COLUMN investment_id SET DEFAULT nextval('public.investments_investment_id_seq'::regclass);
+
+
+--
+-- TOC entry 3259 (class 2604 OID 16492)
+-- Name: jobboard jobid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jobboard ALTER COLUMN jobid SET DEFAULT nextval('public.jobboard_jobid_seq'::regclass);
+
+
+--
+-- TOC entry 3261 (class 2604 OID 16518)
+-- Name: player_outgoings player_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_outgoings ALTER COLUMN player_id SET DEFAULT nextval('public.player_outgoings_player_id_seq'::regclass);
+
+
+--
+-- TOC entry 3244 (class 2604 OID 16393)
+-- Name: players player_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players ALTER COLUMN player_id SET DEFAULT nextval('public.players_player_id_seq'::regclass);
+
+
+--
+-- TOC entry 3250 (class 2604 OID 16403)
+-- Name: transactions transaction_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions ALTER COLUMN transaction_id SET DEFAULT nextval('public.transactions_transaction_id_seq'::regclass);
+
+
+--
+-- TOC entry 3313 (class 2606 OID 16445)
+-- Name: challenges challenges_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.challenges
+    ADD CONSTRAINT challenges_pkey PRIMARY KEY (challenge_id);
+
+
+--
+-- TOC entry 3321 (class 2606 OID 16487)
+-- Name: economic_calendar economic_calendar_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.economic_calendar
+    ADD CONSTRAINT economic_calendar_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3315 (class 2606 OID 16468)
+-- Name: economic_data economic_data_data_type_date_updated_key1; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.economic_data
+    ADD CONSTRAINT economic_data_data_type_date_updated_key1 UNIQUE (data_type, date_updated);
+
+
+--
+-- TOC entry 3317 (class 2606 OID 16466)
+-- Name: economic_data economic_data_pkey1; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.economic_data
+    ADD CONSTRAINT economic_data_pkey1 PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3319 (class 2606 OID 16478)
+-- Name: economiccalendar economiccalendar_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.economiccalendar
+    ADD CONSTRAINT economiccalendar_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3327 (class 2606 OID 16573)
+-- Name: events events_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT events_pkey PRIMARY KEY (event_id);
+
+
+--
+-- TOC entry 3311 (class 2606 OID 16421)
+-- Name: investments investments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.investments
+    ADD CONSTRAINT investments_pkey PRIMARY KEY (investment_id);
+
+
+--
+-- TOC entry 3323 (class 2606 OID 16496)
+-- Name: jobboard jobboard_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.jobboard
+    ADD CONSTRAINT jobboard_pkey PRIMARY KEY (jobid);
+
+
+--
+-- TOC entry 3325 (class 2606 OID 16562)
+-- Name: player_outgoings player_outgoings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.player_outgoings
+    ADD CONSTRAINT player_outgoings_pkey PRIMARY KEY (player_id);
+
+
+--
+-- TOC entry 3307 (class 2606 OID 16398)
+-- Name: players players_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players
+    ADD CONSTRAINT players_pkey PRIMARY KEY (player_id);
+
+
+--
+-- TOC entry 3309 (class 2606 OID 16408)
+-- Name: transactions transactions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_pkey PRIMARY KEY (transaction_id);
+
+
+--
+-- TOC entry 3329 (class 2606 OID 16422)
+-- Name: investments investments_player_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.investments
+    ADD CONSTRAINT investments_player_id_fkey FOREIGN KEY (player_id) REFERENCES public.players(player_id);
+
+
+--
+-- TOC entry 3328 (class 2606 OID 16409)
+-- Name: transactions transactions_player_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.transactions
+    ADD CONSTRAINT transactions_player_id_fkey FOREIGN KEY (player_id) REFERENCES public.players(player_id);
+
+
+-- Completed on 2024-01-21 18:50:33 UTC
+
+--
+-- PostgreSQL database dump complete
+--
+
+--
+-- Database "postgres" dump
+--
+
+\connect postgres
+
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.3 (Debian 15.3-1.pgdg120+1)
+-- Dumped by pg_dump version 15.3
+
+-- Started on 2024-01-21 18:50:33 UTC
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+-- Completed on 2024-01-21 18:50:33 UTC
+
+--
+-- PostgreSQL database dump complete
+--
+
+-- Completed on 2024-01-21 18:50:33 UTC
+
+--
+-- PostgreSQL database cluster dump complete
+--
+
