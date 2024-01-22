@@ -419,6 +419,79 @@ app.get("/weekly-outgoings", async (req, res) => {
   }
 });
 
+
+app.get("/api/jobboard", async (req, res) => {
+  // Extract query parameters for search, filter, and pagination
+  const { search, skillLevel, experienceLevel, page = 1, limit = 10 } = req.query;
+  const offset = (page - 1) * limit;
+
+  // Start building the main query for pagination
+  let query = 'SELECT * FROM public.jobboard WHERE 1=1';
+  const queryParams = [];
+
+  // Add search filter if it exists
+  if (search) {
+    query += ' AND jobtitle ILIKE $1';
+    queryParams.push(`%${search}%`);
+  }
+
+  // Add skill level filter if it exists
+  if (skillLevel) {
+    query += ` AND skilllevel = $${queryParams.length + 1}`;
+    queryParams.push(skillLevel);
+  }
+
+  // Add experience level filter if it exists
+  if (experienceLevel) {
+    query += ` AND experiencelevel = $${queryParams.length + 1}`;
+    queryParams.push(experienceLevel);
+  }
+
+  // Add pagination to the main query
+  query += ` LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}`;
+  queryParams.push(limit, offset);
+
+  // Query to get the total count of records without pagination
+  let countQuery = 'SELECT COUNT(*) FROM public.jobboard WHERE 1=1';
+  const countQueryParams = [];
+
+  // Add the same filters to the count query as the main query
+  if (search) {
+    countQuery += ' AND jobtitle ILIKE $1';
+    countQueryParams.push(`%${search}%`);
+  }
+  if (skillLevel) {
+    countQuery += ` AND skilllevel = $${countQueryParams.length + 1}`;
+    countQueryParams.push(skillLevel);
+  }
+  if (experienceLevel) {
+    countQuery += ` AND experiencelevel = $${countQueryParams.length + 1}`;
+    countQueryParams.push(experienceLevel);
+  }
+
+  try {
+    // Execute the count query to get the total number of records
+    const countResult = await db.query(countQuery, countQueryParams);
+    const totalItems = parseInt(countResult.rows[0].count, 10);
+
+    // Execute the main query with pagination
+    const result = await db.query(query, queryParams);
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalItems / limit);
+
+    // Send the result back to the client
+    res.json({
+      data: result.rows,
+      currentPage: parseInt(page, 10),
+      totalPages: totalPages
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
